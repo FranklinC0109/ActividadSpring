@@ -27,6 +27,7 @@ public class Matricula {
     /**
      * 1-carro
      * 2-moto
+     * prueba
      */
     @Column(name = "Tipo",nullable = false)
     private Integer tipo;
