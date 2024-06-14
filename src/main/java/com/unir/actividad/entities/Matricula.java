@@ -1,8 +1,12 @@
 package com.unir.actividad.entities;
 
+import org.hibernate.annotations.ManyToAny;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +34,8 @@ public class Matricula {
     @Column(name = "Placa", length = 6,nullable = false)
     private String placa;
 
-    @Column(name = "fK_Persona",nullable = false)
-    private Integer fKPersona;
+    @ManyToOne
+    @JoinColumn(name = "fK_Persona")
+    private Persona fKPersona;
 
 }
