@@ -29,16 +29,24 @@ public class PersonaService {
 		return repository.save(objeto);
 	}
 	
-	public Boolean deleteP(Integer idpersona) {
+	public void deleteP(Integer idpersona) {
+		repository.deleteById(idpersona);
+	}
+	
+	public Boolean existeId(Integer pId) {
 		boolean result = false;
-		if(idpersona != null) {
-			if(repository.existsById(idpersona)) {
-				repository.deleteById(idpersona);
-				result = true;
-			}
+		if(repository.existsById(pId)) {
+			result = true;
 		}
 		return result;
-		
+	}
+	
+	public Persona findByIdP(Integer pId) {
+		return repository.findById(pId).get();
+	}
+	
+	public Persona findByNombreP(String nombre) {
+		return repository.findByNombre1(nombre);
 	}
 
 }

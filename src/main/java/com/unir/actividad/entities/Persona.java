@@ -25,11 +25,11 @@ public class Persona {
 	private Integer id;
 	@Column(name="nombre1", length = 50, nullable = false)
 	private String nombre1;
-	@Column(name="nombre2", length = 50, nullable = false)
+	@Column(name="nombre2", length = 50)
 	private String nombre2;
 	@Column(name="apellido1", length = 50, nullable = false)
 	private String apellido1;
-	@Column(name="apellido2", length = 50, nullable = false)
+	@Column(name="apellido2", length = 50)
 	private String apellido2;
 	
 }

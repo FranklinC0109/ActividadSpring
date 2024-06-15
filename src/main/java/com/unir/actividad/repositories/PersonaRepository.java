@@ -8,5 +8,6 @@ import com.unir.actividad.entities.Persona;
 @Repository
 public interface PersonaRepository extends CrudRepository<Persona, Integer> {
 	
+	public Persona findByNombre1(String nombre);
 
 }
