@@ -38,6 +38,6 @@ public class Matricula {
 
     @ManyToOne
     @JoinColumn(name = "fK_Persona")
-    private Persona fKPersona;
+    private Persona idPersona;
 
 }

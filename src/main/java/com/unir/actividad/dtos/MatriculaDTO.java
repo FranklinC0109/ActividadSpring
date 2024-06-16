@@ -15,5 +15,5 @@ public class MatriculaDTO {
     private Integer idMatricula;
     private Integer tipo;
     private String placa;
-    private Persona fKPersona;
+    private PersonaDTO idPersona;
 }

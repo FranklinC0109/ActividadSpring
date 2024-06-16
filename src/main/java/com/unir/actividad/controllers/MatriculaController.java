@@ -70,14 +70,18 @@ public class MatriculaController {
 	}
 
     @PostMapping("/crear")
-	public ResponseEntity<StandardResponse<Matricula>> crearRegitro(@RequestBody MatriculaDTO pObjeto) {
+	public ResponseEntity<StandardResponse<Matricula>> crearRegitro(@RequestBody MatriculaDTO mObjeto) {
 		ResponseEntity<StandardResponse<Matricula>> respuesta = null;
 		StandardResponse<Matricula> resultado = null;
 		try {
-			Matricula objeto = convertirDTOEntidad(pObjeto, Matricula.class);
-			objeto = matricula.saveMatricula(objeto);
-			resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
-			resultado.setObjeto(objeto);
+			if(mObjeto!=null && mObjeto.getIdPersona() != null && mObjeto.getIdPersona().getId() != null){
+				Matricula objeto = convertirDTOEntidad(mObjeto, Matricula.class);
+				objeto = matricula.saveMatricula(objeto);
+				resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
+				resultado.setObjeto(objeto);
+			}else{
+				resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(), "Se debe diligenciar el idPersona");
+			}
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
 		} catch (Exception e) {
 			resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(), e.getMessage());
@@ -87,13 +91,13 @@ public class MatriculaController {
 	}
 
 	@PutMapping("/actualizar")
-	public ResponseEntity<StandardResponse<Matricula>> actualizarRegistro(@RequestBody MatriculaDTO pObjeto) {
+	public ResponseEntity<StandardResponse<Matricula>> actualizarRegistro(@RequestBody MatriculaDTO mObjeto) {
 		ResponseEntity<StandardResponse<Matricula>> respuesta = null;
 		StandardResponse<Matricula> resultado = null;
 		try {
-			if (pObjeto != null && pObjeto.getIdMatricula() != null) {
-				if (matricula.existeIdMatricula(pObjeto.getIdMatricula())) {
-					Matricula objeto = convertirDTOEntidad(pObjeto, Matricula.class);
+			if (mObjeto != null && mObjeto.getIdMatricula() != null) {
+				if (matricula.existeIdMatricula(mObjeto.getIdMatricula())) {
+					Matricula objeto = convertirDTOEntidad(mObjeto, Matricula.class);
 					objeto = matricula.saveMatricula(objeto);
 					resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
 					resultado.setObjeto(objeto);
