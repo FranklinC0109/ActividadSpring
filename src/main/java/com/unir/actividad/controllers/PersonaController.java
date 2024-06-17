@@ -29,11 +29,19 @@ public class PersonaController {
 
 	PersonaService servicio;
 
+	/**
+	 * Método que inyecta la dependencia de servicio persona
+	 * @param PersonaService servicio
+	 * */
 	@Autowired
 	public void setServicio(PersonaService servicio) {
 		this.servicio = servicio;
 	}
 
+	/**
+	 * Método que obtiene todos los registros de la clase persona
+	 * @return ResponseEntity<StandardResponse<Persona>>
+	 */
 	@GetMapping("/obtenerTodos")
 	public ResponseEntity<StandardResponse<Persona>> obtenerTodos() {
 		ResponseEntity<StandardResponse<Persona>> respuesta = null;
@@ -50,6 +58,11 @@ public class PersonaController {
 		return respuesta;
 	}
 
+	/**
+	 * Método que obtiene un registro por el ID
+	 * @param Integer pId
+	 * @return ResponseEntity<StandardResponse<Persona>>
+	 */
 	@GetMapping(path = { "/obtenerId/{pId}" })
 	public ResponseEntity<StandardResponse<Persona>> obtenerById(@PathVariable Integer pId) {
 		ResponseEntity<StandardResponse<Persona>> respuesta = null;
@@ -61,7 +74,7 @@ public class PersonaController {
 				resultado.setObjeto(objeto);
 			} else {
 				resultado = new StandardResponse<Persona>(EStatusReponse.ERROR.getNombre(),
-						"Se debe diligenciar el ID del registro a borrar");
+						"Se debe diligenciar el ID del registro a consultar");
 			}
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
 		} catch (Exception e) {
@@ -71,6 +84,11 @@ public class PersonaController {
 		return respuesta;
 	}
 
+	/**
+	 * Método que obtiene un registro por el Nombre1
+	 * @param String pNombre
+	 * @return ResponseEntity<StandardResponse<Persona>>
+	 */
 	@GetMapping(path = { "/obtenerNombre/{pNombre}" })
 	public ResponseEntity<StandardResponse<Persona>> obtenerByNombre(@PathVariable String pNombre) {
 		ResponseEntity<StandardResponse<Persona>> respuesta = null;
@@ -82,7 +100,7 @@ public class PersonaController {
 				resultado.setObjeto(objeto);
 			} else {
 				resultado = new StandardResponse<Persona>(EStatusReponse.ERROR.getNombre(),
-						"Se debe diligenciar el Nombre1 del registro a borrar");
+						"Se debe diligenciar el Nombre1 del registro a consultar");
 			}
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
 		} catch (Exception e) {
@@ -92,6 +110,11 @@ public class PersonaController {
 		return respuesta;
 	}
 
+	/**
+	 * Método que crear un objeto de la clase persona
+	 * @param PersonaDTO pObjeto
+	 * @return ResponseEntity<StandardResponse<Persona>>
+	 */
 	@PostMapping("/crear")
 	public ResponseEntity<StandardResponse<Persona>> crearRegitro(@RequestBody PersonaDTO pObjeto) {
 		ResponseEntity<StandardResponse<Persona>> respuesta = null;
@@ -109,6 +132,11 @@ public class PersonaController {
 		return respuesta;
 	}
 
+	/**
+	 * Método que actualiza un objeto de la clase persona
+	 * @param PersonaDTO pObjeto
+	 * @return ResponseEntity<StandardResponse<Persona>>
+	 */
 	@PutMapping("/actualizar")
 	public ResponseEntity<StandardResponse<Persona>> actualizarRegistro(@RequestBody PersonaDTO pObjeto) {
 		ResponseEntity<StandardResponse<Persona>> respuesta = null;
@@ -137,6 +165,11 @@ public class PersonaController {
 		return respuesta;
 	}
 
+	/**
+	 * Método que elimina un objeto de la clase persona
+	 * @param Integer pId
+	 * @return ResponseEntity<StandardResponse<Persona>>
+	 */
 	@DeleteMapping(path = { "/borrar/{pId}" })
 	public ResponseEntity<StandardResponse<Persona>> borrarRegistro(@PathVariable Integer pId) {
 		ResponseEntity<StandardResponse<Persona>> respuesta = null;
@@ -163,6 +196,11 @@ public class PersonaController {
 		return respuesta;
 	}
 
+	/**
+	 * Método que convierte un objeto DTO a una clase Entidad
+	 * @param Object dto, Class<T> clase
+	 * @return <T> T
+	 */
 	private <T> T convertirDTOEntidad(Object dto, Class<T> clase) {
 		ModelMapper modelmapper = new ModelMapper();
 		return (T) modelmapper.map(dto, clase);
