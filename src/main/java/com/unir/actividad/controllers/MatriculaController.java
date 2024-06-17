@@ -24,10 +24,10 @@ import com.unir.actividad.services.MatriculaService;
 @RestController
 @RequestMapping("/api/matricula")
 public class MatriculaController {
-    
-    MatriculaService matricula;
 
-    @Autowired
+	MatriculaService matricula;
+
+	@Autowired
 	public void setmatricula(MatriculaService matricula) {
 		this.matricula = matricula;
 	}
@@ -48,7 +48,7 @@ public class MatriculaController {
 		return respuesta;
 	}
 
-    @GetMapping(path = { "/obtenerId/{mId}" })
+	@GetMapping(path = { "/obtenerId/{mId}" })
 	public ResponseEntity<StandardResponse<Matricula>> obtenerById(@PathVariable Integer mId) {
 		ResponseEntity<StandardResponse<Matricula>> respuesta = null;
 		StandardResponse<Matricula> resultado = null;
@@ -59,7 +59,7 @@ public class MatriculaController {
 				resultado.setObjeto(objeto);
 			} else {
 				resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
-						"Se debe diligenciar el ID del registro a borrar");
+						"Se debe diligenciar el ID del registro a consultar");
 			}
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
 		} catch (Exception e) {
@@ -69,18 +69,24 @@ public class MatriculaController {
 		return respuesta;
 	}
 
-    @PostMapping("/crear")
+	@PostMapping("/crear")
 	public ResponseEntity<StandardResponse<Matricula>> crearRegitro(@RequestBody MatriculaDTO mObjeto) {
 		ResponseEntity<StandardResponse<Matricula>> respuesta = null;
 		StandardResponse<Matricula> resultado = null;
 		try {
-			if(mObjeto!=null && mObjeto.getIdPersona() != null && mObjeto.getIdPersona().getId() != null){
-				Matricula objeto = convertirDTOEntidad(mObjeto, Matricula.class);
-				objeto = matricula.saveMatricula(objeto);
-				resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
-				resultado.setObjeto(objeto);
-			}else{
-				resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(), "Se debe diligenciar el idPersona");
+			if (mObjeto != null && mObjeto.getIdPersona() != null && mObjeto.getIdPersona().getId() != null) {
+				if (mObjeto.getTipo() != null && (mObjeto.getTipo() == 1 || mObjeto.getTipo() == 2)) {
+					Matricula objeto = convertirDTOEntidad(mObjeto, Matricula.class);
+					objeto = matricula.saveMatricula(objeto);
+					resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
+					resultado.setObjeto(objeto);
+				} else {
+					resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
+							"Tipo debe ser 1-Carro o 2-Moto");
+				}
+			} else {
+				resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
+						"Se debe diligenciar el IdPersona");
 			}
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
 		} catch (Exception e) {
@@ -135,6 +141,48 @@ public class MatriculaController {
 			} else {
 				resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
 						"Se debe diligenciar el ID del registro a borrar");
+			}
+			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
+		} catch (Exception e) {
+			resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(), e.getMessage());
+			respuesta = new ResponseEntity<>(resultado, HttpStatus.BAD_REQUEST);
+		}
+		return respuesta;
+	}
+
+	@GetMapping(path = { "/obtenerPlaca/{mPlaca}" })
+	public ResponseEntity<StandardResponse<Matricula>> obtenerByPlaca(@PathVariable String mPlaca) {
+		ResponseEntity<StandardResponse<Matricula>> respuesta = null;
+		StandardResponse<Matricula> resultado = null;
+		try {
+			if (mPlaca != null && !mPlaca.isEmpty()) {
+				Matricula objeto = matricula.findByPlaca(mPlaca);
+				resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
+				resultado.setObjeto(objeto);
+			} else {
+				resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
+						"Se debe diligenciar la Placa del registro a consultar");
+			}
+			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
+		} catch (Exception e) {
+			resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(), e.getMessage());
+			respuesta = new ResponseEntity<>(resultado, HttpStatus.BAD_REQUEST);
+		}
+		return respuesta;
+	}
+
+	@GetMapping(path = { "/obtenerPorPersona/{idPersona}" })
+	public ResponseEntity<StandardResponse<Matricula>> obtenerPorPersona(@PathVariable String idPersona) {
+		ResponseEntity<StandardResponse<Matricula>> respuesta = null;
+		StandardResponse<Matricula> resultado = null;
+		try {
+			if (idPersona != null && !idPersona.isEmpty()) {
+				List<Matricula> objeto = matricula.findByPersona(idPersona);
+				resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
+				resultado.setObjetos(objeto);
+			} else {
+				resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
+						"Se debe diligenciar la Persona del registro a consultar");
 			}
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
 		} catch (Exception e) {

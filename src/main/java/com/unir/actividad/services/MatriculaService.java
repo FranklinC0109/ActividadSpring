@@ -7,40 +7,51 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unir.actividad.entities.Matricula;
+import com.unir.actividad.entities.Persona;
 import com.unir.actividad.repositories.MatriculaRepository;
 
 @Service
 public class MatriculaService {
-    MatriculaRepository repository;
+	MatriculaRepository repository;
 
-    @Autowired
+	@Autowired
 	public void setRepository(MatriculaRepository repository) {
 		this.repository = repository;
 	}
-	
-	public List<Matricula> findAllP(){
-		List<Matricula> matriculas= new ArrayList<Matricula>();
-		matriculas.addAll((List<Matricula>)repository.findAll());
+
+	public List<Matricula> findAllP() {
+		List<Matricula> matriculas = new ArrayList<Matricula>();
+		matriculas.addAll((List<Matricula>) repository.findAll());
 		return matriculas;
 	}
-	
+
 	public Matricula saveMatricula(Matricula objeto) {
 		return repository.save(objeto);
 	}
-	
+
 	public void deleteMatricula(Integer idMatricula) {
 		repository.deleteById(idMatricula);
 	}
-	
+
 	public Boolean existeIdMatricula(Integer idMatricula) {
 		boolean result = false;
-		if(repository.existsById(idMatricula)) {
+		if (repository.existsById(idMatricula)) {
 			result = true;
 		}
 		return result;
 	}
-	
+
 	public Matricula findByIdMatricula(Integer pId) {
 		return repository.findById(pId).get();
+	}
+
+	public List<Matricula> findByPersona(String busqueda) {
+
+		return repository.consultarPorPersona(busqueda);
+		
+	}
+
+	public Matricula findByPlaca(String nombre) {
+		return repository.findByPlaca(nombre);
 	}
 }
