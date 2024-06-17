@@ -132,7 +132,7 @@ public class MatriculaController {
 			if (mId != null) {
 				if (matricula.existeIdMatricula(mId)) {
 					matricula.deleteMatricula(mId);
-					resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
+					resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre(),
 							"Registro eliminado satisfactoriamente");
 				} else {
 					resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
