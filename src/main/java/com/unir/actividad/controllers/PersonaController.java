@@ -178,7 +178,7 @@ public class PersonaController {
 			if (pId != null) {
 				if (servicio.existeId(pId)) {
 					servicio.deleteP(pId);
-					resultado = new StandardResponse<Persona>(EStatusReponse.ERROR.getNombre(),
+					resultado = new StandardResponse<Persona>(EStatusReponse.SUCCESS.getNombre(),
 							"Registro eliminado satisfactoriamente");
 				} else {
 					resultado = new StandardResponse<Persona>(EStatusReponse.ERROR.getNombre(),
