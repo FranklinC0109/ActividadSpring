@@ -63,7 +63,7 @@ public class PersonaController {
 	 * @param Integer pId
 	 * @return ResponseEntity<StandardResponse<Persona>>
 	 */
-	@GetMapping(path = { "/obtenerId/{pId}" })
+	@GetMapping(path = { "/obtenerPorId/{pId}" })
 	public ResponseEntity<StandardResponse<Persona>> obtenerById(@PathVariable Integer pId) {
 		ResponseEntity<StandardResponse<Persona>> respuesta = null;
 		StandardResponse<Persona> resultado = null;
@@ -89,7 +89,7 @@ public class PersonaController {
 	 * @param String pNombre
 	 * @return ResponseEntity<StandardResponse<Persona>>
 	 */
-	@GetMapping(path = { "/obtenerNombre/{pNombre}" })
+	@GetMapping(path = { "/obtenerPorNombre/{pNombre}" })
 	public ResponseEntity<StandardResponse<Persona>> obtenerByNombre(@PathVariable String pNombre) {
 		ResponseEntity<StandardResponse<Persona>> respuesta = null;
 		StandardResponse<Persona> resultado = null;
@@ -101,6 +101,32 @@ public class PersonaController {
 			} else {
 				resultado = new StandardResponse<Persona>(EStatusReponse.ERROR.getNombre(),
 						"Se debe diligenciar el Nombre1 del registro a consultar");
+			}
+			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
+		} catch (Exception e) {
+			resultado = new StandardResponse<Persona>(EStatusReponse.ERROR.getNombre(), e.getMessage());
+			respuesta = new ResponseEntity<>(resultado, HttpStatus.BAD_REQUEST);
+		}
+		return respuesta;
+	}
+	
+	/**
+	 * Método que obtiene un registro por la cédula
+	 * @param Integer pCedula
+	 * @return ResponseEntity<StandardResponse<Persona>>
+	 */
+	@GetMapping(path = { "/obtenerPorCedula/{pCedula}" })
+	public ResponseEntity<StandardResponse<Persona>> obtenerByCedula(@PathVariable Integer pCedula) {
+		ResponseEntity<StandardResponse<Persona>> respuesta = null;
+		StandardResponse<Persona> resultado = null;
+		try {
+			if (pCedula != null ) {
+				Persona objeto = servicio.findByCedulaP(pCedula);
+				resultado = new StandardResponse<Persona>(EStatusReponse.SUCCESS.getNombre());
+				resultado.setObjeto(objeto);
+			} else {
+				resultado = new StandardResponse<Persona>(EStatusReponse.ERROR.getNombre(),
+						"Se debe diligenciar la cédula del registro a consultar");
 			}
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
 		} catch (Exception e) {

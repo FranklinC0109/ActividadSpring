@@ -80,5 +80,14 @@ public class PersonaService {
 	public Persona findByNombreP(String nombre) {
 		return repository.findByNombre1(nombre);
 	}
+	
+	/**
+	 * Método que obtiene un registro por la cédula
+	 * @param String nombre
+	 * @return Persona
+	 */
+	public Persona findByCedulaP(Integer cedula) {
+		return repository.findByCedula(cedula);
+	}
 
 }

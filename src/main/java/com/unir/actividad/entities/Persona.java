@@ -23,6 +23,8 @@ public class Persona {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id_Persona", nullable = false)
 	private Integer id;
+	@Column(name="cedula", length = 50, nullable = false)
+	private Integer cedula;
 	@Column(name="nombre1", length = 50, nullable = false)
 	private String nombre1;
 	@Column(name="nombre2", length = 50)
