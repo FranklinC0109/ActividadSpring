@@ -18,14 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unir.actividad.dtos.MatriculaDTO;
 import com.unir.actividad.entities.Matricula;
 import com.unir.actividad.entities.StandardResponse;
+import com.unir.actividad.entities.Usuario;
 import com.unir.actividad.enums.EStatusReponse;
 import com.unir.actividad.services.MatriculaService;
+import com.unir.actividad.services.UsuarioService;
 
 @RestController
 @RequestMapping("/api/matricula")
 public class MatriculaController {
 
 	MatriculaService matricula;
+	UsuarioService usuario;
 
 	@Autowired
 	public void setmatricula(MatriculaService matricula) {
@@ -187,6 +190,27 @@ public class MatriculaController {
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
 		} catch (Exception e) {
 			resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(), e.getMessage());
+			respuesta = new ResponseEntity<>(resultado, HttpStatus.BAD_REQUEST);
+		}
+		return respuesta;
+	}
+
+	@GetMapping(path = { "/obtenerPlaca/{usu}/{contra}" })
+	public ResponseEntity<StandardResponse<Usuario>> consultarIngreso(@PathVariable String usu,@PathVariable String contra) {
+		ResponseEntity<StandardResponse<Usuario>> respuesta = null;
+		StandardResponse<Usuario> resultado = null;
+		try {
+			if (usu != null && !usu.isEmpty() && contra != null && !contra.isEmpty()) {
+				Usuario objeto = usuario.consultarIngreso(usu,contra);
+				resultado = new StandardResponse<Usuario>(EStatusReponse.SUCCESS.getNombre());
+				resultado.setObjeto(objeto);
+			} else {
+				resultado = new StandardResponse<Usuario>(EStatusReponse.ERROR.getNombre(),
+						"Por favor verifique que esta llenando todos los datos");
+			}
+			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
+		} catch (Exception e) {
+			resultado = new StandardResponse<Usuario>(EStatusReponse.ERROR.getNombre(), e.getMessage());
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.BAD_REQUEST);
 		}
 		return respuesta;
