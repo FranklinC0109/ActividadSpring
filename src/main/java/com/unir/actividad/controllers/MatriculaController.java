@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.unir.actividad.dtos.MatriculaDTO;
 import com.unir.actividad.entities.Matricula;
+import com.unir.actividad.entities.Persona;
 import com.unir.actividad.entities.StandardResponse;
 import com.unir.actividad.entities.Usuario;
 import com.unir.actividad.enums.EStatusReponse;
 import com.unir.actividad.services.MatriculaService;
+import com.unir.actividad.services.PersonaService;
 import com.unir.actividad.services.UsuarioService;
 
 @CrossOrigin("*")
@@ -30,10 +32,16 @@ import com.unir.actividad.services.UsuarioService;
 public class MatriculaController {
 
 	MatriculaService matricula;
+	PersonaService persona;
 
 	@Autowired
-	public void setmatricula(MatriculaService matricula) {
+	public void setMatricula(MatriculaService matricula) {
 		this.matricula = matricula;
+	}
+	
+	@Autowired
+	public void setPersona(PersonaService persona) {
+		this.persona = persona;
 	}
 
 	@GetMapping("/obtenerTodosM")
@@ -176,17 +184,23 @@ public class MatriculaController {
 	}
 
 	@GetMapping(path = { "/obtenerPorPersona/{idPersona}" })
-	public ResponseEntity<StandardResponse<Matricula>> obtenerPorPersona(@PathVariable String idPersona) {
+	public ResponseEntity<StandardResponse<Matricula>> obtenerPorPersona(@PathVariable Integer idPersona) {
 		ResponseEntity<StandardResponse<Matricula>> respuesta = null;
 		StandardResponse<Matricula> resultado = null;
 		try {
-			if (idPersona != null && !idPersona.isEmpty()) {
-				List<Matricula> objeto = matricula.findByPersona(idPersona);
-				resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
-				resultado.setObjetos(objeto);
+			if (idPersona != null) {
+				Persona obj = persona.findByCedulaP(idPersona);
+				if(obj != null && obj.getId() != null) {
+					List<Matricula> objeto = matricula.findByPersona(idPersona);
+					resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
+					resultado.setObjetos(objeto);
+				}else {
+					resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
+							"La cédula no esta registrada");
+				}
 			} else {
 				resultado = new StandardResponse<Matricula>(EStatusReponse.ERROR.getNombre(),
-						"Se debe diligenciar la Persona del registro a consultar");
+						"Se debe diligenciar la cédula de la persona a consultar registros");
 			}
 			respuesta = new ResponseEntity<>(resultado, HttpStatus.OK);
 		} catch (Exception e) {
