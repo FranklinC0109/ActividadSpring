@@ -44,7 +44,7 @@ public class MatriculaService {
 		return repository.findById(pId).get();
 	}
 
-	public List<Matricula> findByPersona(Integer busqueda) {
+	public List<Matricula> findByPersona(String busqueda) {
 
 		return repository.consultarPorPersona(busqueda);
 		

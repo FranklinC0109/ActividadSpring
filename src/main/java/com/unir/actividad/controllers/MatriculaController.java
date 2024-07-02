@@ -20,11 +20,9 @@ import com.unir.actividad.dtos.MatriculaDTO;
 import com.unir.actividad.entities.Matricula;
 import com.unir.actividad.entities.Persona;
 import com.unir.actividad.entities.StandardResponse;
-import com.unir.actividad.entities.Usuario;
 import com.unir.actividad.enums.EStatusReponse;
 import com.unir.actividad.services.MatriculaService;
 import com.unir.actividad.services.PersonaService;
-import com.unir.actividad.services.UsuarioService;
 
 @CrossOrigin("*")
 @RestController
@@ -191,7 +189,7 @@ public class MatriculaController {
 			if (idPersona != null) {
 				Persona obj = persona.findByCedulaP(idPersona);
 				if(obj != null && obj.getId() != null) {
-					List<Matricula> objeto = matricula.findByPersona(idPersona);
+					List<Matricula> objeto = matricula.findByPersona(obj.getId().toString());
 					resultado = new StandardResponse<Matricula>(EStatusReponse.SUCCESS.getNombre());
 					resultado.setObjetos(objeto);
 				}else {
