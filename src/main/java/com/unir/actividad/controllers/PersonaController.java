@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.unir.actividad.dtos.PersonaDTO;
+import com.unir.actividad.entities.Matricula;
 import com.unir.actividad.entities.Persona;
 import com.unir.actividad.entities.StandardResponse;
 import com.unir.actividad.enums.EStatusReponse;
+import com.unir.actividad.services.MatriculaService;
 import com.unir.actividad.services.PersonaService;
 
 @CrossOrigin("*")
@@ -30,6 +32,7 @@ import com.unir.actividad.services.PersonaService;
 public class PersonaController {
 
 	PersonaService servicio;
+	MatriculaService servicioMatricula;
 
 	/**
 	 * Método que inyecta la dependencia de servicio persona
@@ -38,6 +41,11 @@ public class PersonaController {
 	@Autowired
 	public void setServicio(PersonaService servicio) {
 		this.servicio = servicio;
+	}
+	
+	@Autowired
+	public void setServicioMatricula(MatriculaService servicioMatricula) {
+		this.servicioMatricula = servicioMatricula;
 	}
 
 	/**
@@ -205,9 +213,15 @@ public class PersonaController {
 		try {
 			if (pId != null) {
 				if (servicio.existeId(pId)) {
-					servicio.deleteP(pId);
-					resultado = new StandardResponse<Persona>(EStatusReponse.SUCCESS.getNombre(),
-							"Registro eliminado satisfactoriamente");
+					List<Matricula> objetosMat = servicioMatricula.findByPersona(pId.toString());
+					if(objetosMat != null && objetosMat.size() > 0) {
+						resultado = new StandardResponse<Persona>(EStatusReponse.ERROR.getNombre(),
+								"La persona tiene asociadas unas matriculas");
+					}else {
+						servicio.deleteP(pId);
+						resultado = new StandardResponse<Persona>(EStatusReponse.SUCCESS.getNombre(),
+								"Registro eliminado satisfactoriamente");
+					}
 				} else {
 					resultado = new StandardResponse<Persona>(EStatusReponse.ERROR.getNombre(),
 							"El ID diligenciado no existe");
